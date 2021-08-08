@@ -1,0 +1,27 @@
+{
+  "name": "bloxdossier",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "chart.js": "^3.5.0",
+    "next": "11.0.1",
+    "puppeteer": "^10.2.0",
+    "react": "17.0.2",
+    "react-chartjs-2": "^3.0.4",
+    "react-dom": "17.0.2",
+    "styled-components": "^5.3.0"
+  },
+  "devDependencies": {
+    "@types/react": "17.0.16",
+    "@types/styled-components": "^5.1.12",
+    "eslint": "7.32.0",
+    "eslint-config-next": "11.0.1",
+    "typescript": "4.3.5"
+  }
+}

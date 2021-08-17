@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import { PolarArea } from "react-chartjs-2";
 import { GetServerSideProps } from "next";
+import { ClientRequest } from 'http';
+import { ParsedUrlQuery } from 'querystring'
+import { decode } from 'js-base64';
 
 const Container = styled.div`
   display: flex;
@@ -50,7 +53,7 @@ const Small = styled.span`
   font-size: 14px;
 `;
 
-const data = {
+const chartData = {
   labels: ["Red", "Blue", "Yellow", "Green", "Purple"],
   datasets: [
     {
@@ -74,6 +77,7 @@ type Props = {
     id: number;
     title: string;
     body: string;
+    chart: object;
   };
 };
 
@@ -87,7 +91,7 @@ const Home = ({ placeholder }: Props) => {
         <Subtitle>{now}</Subtitle>
       </TitleWrapper>
       <PolarWrapper>
-        <PolarArea data={data} />
+        <PolarArea data={placeholder.chart} />
       </PolarWrapper>
       <Paragraph>{placeholder.body}</Paragraph>
       <Paragraph>{placeholder.body}</Paragraph>
@@ -100,6 +104,14 @@ const Home = ({ placeholder }: Props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { ['x-report-data']: data } = context.req.headers;
+  if (data) {
+    return {
+      props: {
+        placeholder: JSON.parse(decode(data as string)),
+      },
+    };
+  }
   const number = Math.floor(Math.random() * 100);
   const res = await fetch(
     `https://jsonplaceholder.typicode.com/posts/${number}`
@@ -107,7 +119,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const placeholder: Props = await res.json();
   return {
     props: {
-      placeholder,
+      placeholder: { ...placeholder, chart: chartData },
     },
   };
 };
